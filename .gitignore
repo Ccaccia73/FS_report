@@ -116,3 +116,11 @@ ENV/
 *.nav
 *.snm
 *.vrb
+
+#images
+*.bmp
+*.jvc
+
+
+
+
