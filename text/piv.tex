@@ -1,10 +1,11 @@
 \documentclass[a4paper]{article}
 
-\usepackage[english]{babel}
+\usepackage[italian]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage{subfigure}
 
 \title{PIV image analysis}
 
@@ -16,21 +17,44 @@
 \maketitle
 
 \begin{abstract}
-Enter a short summary here. What topic do you want to investigate and why? What experiment did you perform? What were your main results and conclusion?
+Analisi di coppie di immagini PIV relative al campo di moto intorno ad un profilo alare di tipo NACA 23012. 
 \end{abstract}
 
-\section{Introduction 5 lines to max 1/2 page}
-\label{sec:introduction}
+\section{Introduzione}
+\label{sec:intro}
 
-Explain the context of the experiment here. Why is condensed matter physics interesting or important?
-Optional things you could talk about (but don't have to -- this is up to you): transistors, computers, Quantum computers, fundamental knowledge (e.g. the resistance quantum).
+La \textit{Particle Image Velocimetry} (PIV) è un metodo per la visualizzazione qualitativa e quantitativa del campo di moto di un fluido mediante l'uso di particelle traccianti illuminate da una lama di luce e fotografate in due istanti successivi. I dati rilevanti per l'esperimento sono i seguenti:
+\begin{itemize}
+	\item profilo alare \textit{NACA 23012} di corda $30cm$,
+	\item dimensione delle immagini: $1024 \times 1280$ pixel \textit{grayscale} (cfr. Figura \ref{fig:img}) 
+	\item dimensione della finestra di analisi: $103\times82mm$
+	\item intervallo tra i fotogrammi: $\Delta t = 10\mu s$
+\end{itemize}
 
-Briefly explain what methods you will use in the experiment, and what values you will extract from the data.
+L'analisi si compone di tre fasi: \textit{preprocessing}, \textit{correlazione} ed \textit{analisi} dei risultati.
 
-For this section and all following sections: If you refer to an equation, previous result or theory that is not regarded as common knowledge, then cite the source (article or book) where you found this. For example, you can cite the Nano 3 Lecture notes \cite{nano3}.
+\section{Preprocessing}
 
-\section{Theory 2-3 pages}
-\label{sec:theory}
+Prima di procedere alla determinazione del campo di velocit\`{a} \`{e} opportuno analizzare le caratteristiche delle immagini ed eventualmente migliorarne la qualit\`{a}. Le tecniche di miglioramento possono riguardare:
+
+\begin{itemize}
+	\item \textit{Background subtraction}: tecnica utile ad eliminare lo sfondo comune alle immagini ed evidenziare solo il moto delle particelle. In genere serve una serie di immagini (almeno una decina) per poter eliminare lo sfondo in modo affidabile, pertanto non è stata impiegata qui.
+	\item \textit{Filtraggio}:  varie tecniche utili a migliorare la distinzione tra particelle e sfondo e a ridurre il rumore di fondo.
+\end{itemize}
+
+Un utile passo preliminare consiste nell'analizzare la distribuzione dell'intensità di grigio dei pixel, come illustrato in Figura \ref{fig:hist}. Si evidenzia come sia presente una netta separazione, in entrambe le immagini, tra lo sfondo (maggioranza dei pixel scuri) e le particelle ad intensità massima.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{images/hist_cr.png}
+	\caption{\label{fig:hist}Istogrammi della distribuzione delle intensità di grigio}
+\end{figure}
+
+Per questo motivo si è deciso di utilizzare le immagini originali senza l'applicazione di filtri. Inoltre, alcune analisi preliminari hanno mostrato\footnote{Test effettuati utilizzando semplici filtri a soglia o di tipo \textit{min/max}\cite{mmaxf}} come l'utilizzo di immagini filtrate possa in questo caso produrre un maggior numero di correlazioni spurie rispetto alle immagini originali, a parità di condizioni di test (cfr. ad es. Figura \ref{fig:filt_piv} ).
+
+
+\section{Correlazione}
+\label{sec:corr}
 
 \subsection{Two-dimensional Electron Gas}
 Here, explain the concept of a 2-DEG in GaAs/AlGaAs. What is a 2-DEG and why does it arise?
@@ -117,6 +141,8 @@ The equation \ref{eq:sn} is very nice.
 
 Use section and subsection commands to organize your document. \LaTeX{} handles all the formatting and numbering automatically. Use ref and label commands for cross-references.
 
+
+
 \subsection{How to Make Lists}
 
 You can make lists with automatic numbering \dots
@@ -139,11 +165,33 @@ You can make lists with automatic numbering \dots
 
 We hope you find write\LaTeX\ useful, and please let us know if you have any feedback using the help menu above.
 
+\newpage
+
+\section{Figure Aggiuntive}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{images/raw_images.png}
+	\caption{\label{fig:img}Immagini originali}
+\end{figure}
+
+
+ \begin{figure}[h]
+ 	\centering
+ 	\subfigure[PIV con Correlazione - finestra 32px]
+ 	{\includegraphics[width=0.48\textwidth]{images/norm_32_filt.png}}
+ 	%\hspace{0.3\textwidth}
+ 	\subfigure[PIV con DFT - finestra 32px]
+ 	{\includegraphics[width=0.48\textwidth]{images/scikit_32_filt.png}}
+ 	\caption{\label{fig:filt_piv}PIV su immagini filtrate}
+ \end{figure}
+
+
+
+
 \begin{thebibliography}{9}
-\bibitem{nano3}
-  K. Grove-Rasmussen og Jesper Nygård,
-  \emph{Kvantefænomener i Nanosystemer}.
-  Niels Bohr Institute \& Nano-Science Center, Københavns Universitet
+\bibitem{mmaxf}
+Deen, Niels G., et al. "On image pre-processing for PIV of single-and two-phase flows over reflecting objects." Experiments in fluids 49.2 (2010): 525-530.
 
 \end{thebibliography}
 \end{document}

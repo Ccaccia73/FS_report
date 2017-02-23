@@ -65,8 +65,10 @@ def subpixel(corr_matrix,dy,dx):
         phi_m1y = corr_matrix[dy-1,dx]
         phi_m1x = corr_matrix[dy,dx-1]
         
-        eps_x = 0.5*np.log(phi_m1x/phi_1x)/np.log(phi_m1x/(phi_1x*phi_0**2))
-        eps_y = 0.5*np.log(phi_m1y/phi_1y)/np.log(phi_m1y/(phi_1y*phi_0**2))
+        eps_x = 0.5*(np.log(phi_m1x) - np.log(phi_1x))/ (np.log(phi_m1x) + np.log(phi_1x) - 2*np.log(phi_0))
+        
+        
+        eps_y = 0.5*(np.log(phi_m1y) - np.log(phi_1y))/ (np.log(phi_m1y) + np.log(phi_1y) - 2*np.log(phi_0))
     
     else:
         eps_y = 0.0
