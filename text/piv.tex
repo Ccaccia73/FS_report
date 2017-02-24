@@ -2,10 +2,12 @@
 
 \usepackage[italian]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath}
+\usepackage{mathrsfs,amsmath}
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{subfigure}
+\usepackage{url}
+\usepackage{xfrac}
 
 \title{PIV image analysis}
 
@@ -26,6 +28,7 @@ Analisi di coppie di immagini PIV relative al campo di moto intorno ad un profil
 La \textit{Particle Image Velocimetry} (PIV) è un metodo per la visualizzazione qualitativa e quantitativa del campo di moto di un fluido mediante l'uso di particelle traccianti illuminate da una lama di luce e fotografate in due istanti successivi. I dati rilevanti per l'esperimento sono i seguenti:
 \begin{itemize}
 	\item profilo alare \textit{NACA 23012} di corda $30cm$,
+	\item velocità galleria: $30m/s$,
 	\item dimensione delle immagini: $1024 \times 1280$ pixel \textit{grayscale} (cfr. Figura \ref{fig:img}) 
 	\item dimensione della finestra di analisi: $103\times82mm$
 	\item intervallo tra i fotogrammi: $\Delta t = 10\mu s$
@@ -53,126 +56,172 @@ Un utile passo preliminare consiste nell'analizzare la distribuzione dell'intens
 Per questo motivo si è deciso di utilizzare le immagini originali senza l'applicazione di filtri. Inoltre, alcune analisi preliminari hanno mostrato\footnote{Test effettuati utilizzando semplici filtri a soglia o di tipo \textit{min/max}\cite{mmaxf}} come l'utilizzo di immagini filtrate possa in questo caso produrre un maggior numero di correlazioni spurie rispetto alle immagini originali, a parità di condizioni di test (cfr. ad es. Figura \ref{fig:filt_piv} ).
 
 
-\section{Correlazione}
+\section{Algoritmo per PIV}
 \label{sec:corr}
 
-\subsection{Two-dimensional Electron Gas}
-Here, explain the concept of a 2-DEG in GaAs/AlGaAs. What is a 2-DEG and why does it arise?
+Il campo di velocità è ottenuto tramite \textit{correlazione} delle due immagini opportunamente traslate. I passi dell'algoritmo sono i seguenti:
 
-\subsection{Hall Effect}
-Explain the classical Hall effect in your own words. What do I measure at $B=0$? And what happens if $B>0$? Which effect gives rise to the voltage drop in the vertical direction?
 
-\subsection{Quantum Hall Effect}
-Explain the IQHE in your own words. What does the density of states look like in a 2-DEG when $B=0$? What are Landau levels and how do they arise? What are edge states? What does the electron transport look like when you change the magnetic field? What do you expect to measure?
+\subsection{Definizione dell'algoritmo di correlazione}
+Esistono diversi algoritmi \cite{corrCV} per effettuare la correlazione di due immagini. Sono stati considerati i seguenti:
 
-\section{Experiment 1-2 pages}
-\subsection{Fabrication}
-Explain a step-by-step recipe for fabrication here. How long did you etch and why? What is an Ohmic contact?
-\subsection{Experimental set-up}
-Explain the experimental set-up here. Use a schematic picture (make it yourself in photoshop, paint, ...) to show how the components are connected. Briefly explain how a lock-in amplifier works.
-
-\section{Results and interpretation 2-3 pages}
-Show a graph of the longitudinal resistivity ($\rho_{xx}$) and Hall resistivity ($\rho_{xy}$) versus magnetic field, extracted from the raw data shown in figure \ref{fig:data}. You will have the link to the data in your absalon messages, if not e-mail Guen (guen@nbi.dk). Explain how you calculated these values, and refer to the theory.
-
-\begin{figure}
-\centering
-%\includegraphics[width=1\textwidth]{raw_data.png}
-\caption{\label{fig:data}Raw (unprocessed) data. Replace this figure with the one you've made, that shows the resistivity.}
-\end{figure}
-
-\subsection{Classical regime}
-Calculate the sheet electron density $n_{s}$ and electron mobility $\mu$ from the data in the low-field regime, and refer to the theory in section \ref{sec:theory}. Explain how you retrieved the values from the data (did you use a linear fit?).
-Round values off to 1 or 2 significant digits: 8.1643 ~= 8.2. Also, 5e-6 is easier to read than 0.000005.
-
-!OBS: This part is optional (only if you have time left).
-Calculate the uncertainty as follows: \newline $u(f(x, y, z)) = \sqrt{(\frac{\delta f}{\delta{x}} u(x))^{2} + (\frac{\delta f}{\delta{y}} u(y))^{2} + (\frac{\delta f}{\delta{z}} u(z))^{2}}$, where $f$ is the calculated value ($n_{s}$ or $\mu$), $x, y, z$ are the variables taken from the measurement and $u(x)$ is the uncertainty in x (and so on).
-
-\subsection{Quantum regime}
-Calculate $n_{s}$ for the high-field regime.
-Show a graph of the longitudinal conductivity ($\rho_{xx}$) and Hall conductivity($\rho_{xy}$) \textbf{in units of the resistance quantum} ($\frac{h}{e^{2}}$), depicting the integer filling factors for each plateau.
-Show a graph of the plateau number versus its corresponding value of $1/B$. From this you can determine the slope, which you use to calculate the electron density.
-Again, calculate the uncertainty for your obtained values.
-
-\section{Discussion 1/2-1 page}
-Discuss your results. Compare the two values of $n_{s}$ that you've found in the previous section. Compare your results with literature and comment on the difference. If you didn't know the value of the resistance quantum, would you be able to deduce it from your measurements? If yes/no, why?
-
-\newpage
-\section{Some LaTeX tips}
-\label{sec:latex}
-\subsection{How to Include Figures}
-
-First you have to upload the image file (JPEG, PNG or PDF) from your computer to writeLaTeX using the upload link the project menu. Then use the includegraphics command to include it in your document. Use the figure environment and the caption command to add a number and a caption to your figure. See the code for Figure \ref{fig:frog} in this section for an example.
-
-\begin{figure}
-\centering
-%\includegraphics[width=0.3\textwidth]{frog.jpg}
-\caption{\label{fig:frog}This frog was uploaded to writeLaTeX via the project menu.}
-\end{figure}
-
-\subsection{How to Make Tables}
-
-Use the table and tabular commands for basic tables --- see Table~\ref{tab:widgets}, for example.
-
-\begin{table}
-\centering
-\begin{tabular}{l|r}
-Item & Quantity \\\hline
-Widgets & 42 \\
-Gadgets & 13
-\end{tabular}
-\caption{\label{tab:widgets}An example table.}
-\end{table}
-
-\subsection{How to Write Mathematics}
-
-\LaTeX{} is great at typesetting mathematics. Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
+\paragraph{Sum of Squared Differences [SSD]} Consiste in un algoritmo computazionalmente semplice, la miglior correlazione si trova nel punto di \textit{minimo} di:
 
 \begin{equation}
-S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
-      = \frac{1}{n}\sum_{i}^{n} X_i
-\label{eq:sn}
+R\left[x,y \right] = \sum_{i,j=-\sfrac{N}{2}}^{\sfrac{N}{2}} \left( A\left[i+x,j+y\right] - B\left[i,j \right] \right)^2
+\label{eq:ssd}
 \end{equation}
 
-denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
+\paragraph{Normalized Cross Correlation [NCC]}\cite{ncc} Richiede il calcolo di media e deviazione standard delle immagini, la miglior correlazione si trova nel punto di \textit{massimo} di:
 
-The equation \ref{eq:sn} is very nice.
-
-\subsection{How to Make Sections and Subsections}
-
-Use section and subsection commands to organize your document. \LaTeX{} handles all the formatting and numbering automatically. Use ref and label commands for cross-references.
-
+\begin{equation}
+R\left[x,y \right] = \frac{ \sum_{i,j=-\sfrac{N}{2}}^{\sfrac{N}{2}} \left( A\left[i+x,j+y\right] - \mu_A \right) \cdot \left( B\left[i,j \right] - \mu_B \right) } { \sigma_A \cdot \sigma_B }
+\label{eq:ncc}
+\end{equation}
 
 
-\subsection{How to Make Lists}
+\paragraph{Discrete Fouries Transformation [DFT]} Richiede il calcolo delle trasformate delle immagini, la miglior correlazione si trova nel punto di \textit{massimo} di:
 
-You can make lists with automatic numbering \dots
+\begin{equation}
+R = \mathscr{F}^{-1} \{ \mathscr{F}\{A\} \circ \mathscr{F}\{B\}^*    \}
+\label{eq:dft}
+\end{equation}
 
-\begin{enumerate}
-\item Like this,
-\item and like this.
-\end{enumerate}
-\dots or bullet points \dots
-\begin{itemize}
-\item Like this,
-\item and like this.
-\end{itemize}
-\dots or with words and descriptions \dots
-\begin{description}
-\item[Word] Definition
-\item[Concept] Explanation
-\item[Idea] Text
-\end{description}
+\subsection{Scelta delle finestre di interrogazione}
 
-We hope you find write\LaTeX\ useful, and please let us know if you have any feedback using the help menu above.
+Trascurando aspetti computazionali, la dimensione delle finestre di interrogazione comporta un \textit{trade-off} tra una definizione accurata del campo di velocità, che richiede finestre di interrogazione piccole, e la bontà della correlazione, più affidabile con finestre grandi. I risultati più significativi sono stati ottenuti con finestre da \textbf{16} e \textbf{32} pixel.\\
+Anche il massimo spostamento è un parametro da considerare: dai dati a disposizione, una velocità di $50 m/s$ corrisponde ad uno spostamento di circa $6.24px$ pertanto si considerano spostamenti massimi di \textbf{8} pixel. Le finestre di interrogazione sono pertanto:
+
+\begin{equation}
+I = \left[ 8+jN: 7+(j+1)N,8+kN: 7+(k+1)N\right] \quad N \in \{16,32 \} \quad j,k = 0 \ldots
+\label{eq:int}
+\end{equation}
+
+\subsection{Interpolazione sub-pixel}
+
+La correlazione definisce solamente spostamenti di pixel interi. Per raffinare il calcolo è possibile utilizzare algoritmi di interpolazione, come ad esempio descritto in \cite{spim}.
+
+\paragraph{parabolic-fit estimator}
+
+\begin{equation}
+\epsilon =  \frac{R_{-1} - R_{+1} }{2\left( R_{-1} + R_{+1} -2 R_0   \right)}
+\label{eq:pf}
+\end{equation}
+
+
+
+\paragraph{3 point gaussian-fit estimator}
+
+\begin{equation}
+\epsilon =  \frac{\ln(R_{-1}) - \ln(R_{+1}) }{2\left( \ln(R_{-1}) + \ln(R_{+1} -2 \ln(R_0)   \right)}
+\label{eq:3pg}
+\end{equation}
+
+Le equazioni \ref{eq:pf} e \ref{eq:3pg} sono da applicare in entrambe le direzioni.\\
+Nel caso di \textbf{NCC} è stato adottato l'algoritmo di \ref{eq:pf} in quanto immune a problemi di condizionamento legato ai logaritmi.
+Nel caso di \textbf{DFT}, l'algoritmo adottato \cite{spdft} consente automaticamente di definire un livello di precisione \textit{sub-pixel}. 
+
+\subsection{Fitting del profilo}
+
+I dati geometrici a disposizione hanno permesso di effettuare il \textit{fitting} (manuale) del profilo alare rispetto alle immagini a disposizione. Questo ha consentito di comprendere meglio il campo di moto (soprattutto rispetto alla scala dimensionale del profilo) e di escludere tutte le correlazioni di elementi interni all'ala. Il fitting migliore è stato trovato a $7.2°$ di inclinazione rispetto all'asse della fotocamera ed è illustrato in figura \ref{fig:airfoil} dove si può anche visualizzare l'andamento della velocità.  
+
+
+\section{Risultati}
+
+Di seguito si riportano i principali risultati ottenuti dall'analisi PIV.
+
+\subsection{SSD senza interpolazione sub-pixel}
+
+Pur utilizzando una stima della correlazione semplice, si ottengono risultati interessanti, con pochi vettori di velocità palesemente spuri (cfr. figura \ref{fig:ssd}). L'unica zona difficile da correlare risulta essere la porzione visibile di intradosso, dove probabilmente vi è un afflusso non ottimale di particelle o il moto è particolarmente complesso. L'assenza di raffinamento \textit{sub-pixel} evidenzia un andamento della velocità costituito da regioni uniformi. Adottando una finestra a $16px$ comporta molti risultati spuri nello strato limite, come evidenziato in figura \ref{fig:ssd:a}.
+
+\begin{figure}[h]
+	\centering
+	\subfigure[PIV con SSD - finestra 16px\label{fig:ssd:a}]
+	{\includegraphics[width=0.48\textwidth]{images/ssd_CM_16_orig.png}}
+	%\hspace{0.3\textwidth}
+	\subfigure[PIV con SSD - finestra 32px\label{fig:ssd:b}]
+	{\includegraphics[width=0.48\textwidth]{images/ssd_CM_32_orig.png}}
+	\caption{PIV con correlazione SSD}
+	\label{fig:ssd}
+\end{figure}
+
+\subsection{NCC con interpolazione sub-pixel}
+
+La correlazione secondo l'eq.\ref{eq:ncc}, unitamente all'interpolazione secondo l'eq.\ref{eq:pf}, porta a risultati soddisfacenti, sia considerando finestre di interrogazione da $32px$ (figura \ref{fig:ncc:b}), in cui sono praticamente assenti correlazioni spurie, sia considerando finestre di interrogazione da $16px$ (figura \ref{fig:ncc:a}), in cui il campo di velocità è risolto molto bene, ad eccezione di pochi punti probabilmente spuri nello strato limite e la zona dell'intradosso.
+
+\begin{figure}[ht]
+	\centering
+	\subfigure[PIV con NCC - finestra 16px\label{fig:ncc:a}]
+	{\includegraphics[width=0.48\textwidth]{images/norm_CM_16_orig.png}}
+	%\hspace{0.3\textwidth}
+	\subfigure[PIV con NCC - finestra 32px\label{fig:ncc:b}]
+	{\includegraphics[width=0.48\textwidth]{images/norm_CM_32_orig.png}}
+	\caption{PIV con correlazione NCC}
+	\label{fig:ncc}
+\end{figure}
+
+
+\subsection{DFT}
+
+Seguendo l'esempio descritto in \cite{scikit}, è stata implementata la PIV utilizzando funzioni di libreria che consentono di determinare lo \textit{shift} tra due immagini tramite \textit{trasformata di Fourier} con upsampling per ottenere una precisione sub-pixel. Utilizzando una finestra di interrogazione da $32px$ (figura \ref{fig:dft:b}) il risultato è sostanzialmente identico a \textbf{NCC}. Una finestra di interrogazione da $16px$  (figura \ref{fig:dft:a}) comporta un elevato numero di vettori spuri nella regione al di fuori dello strato limite.
+
+\begin{figure}[ht]
+	\centering
+	\subfigure[PIV con DFT - finestra 16px\label{fig:dft:a}]
+	{\includegraphics[width=0.48\textwidth]{images/scikit_CM_16_orig.png}}
+	%\hspace{0.3\textwidth}
+	\subfigure[PIV con DFT - finestra 32px\label{fig:dft:b}]
+	{\includegraphics[width=0.48\textwidth]{images/scikit_CM_32_orig.png}}
+	\caption{PIV con correlazione DFT}
+	\label{fig:dft}
+\end{figure}
+
+
+\section{Post-Processing}
+
+Una volta determinato il campo di spostamenti in pixel è necessario eseguire alcune operazioni di \textit{post-processing}.
+
+\paragraph{Conversione}: è necessario passare dagli spostamenti in pixel al valore di velocità, secondo la formula:
+
+\begin{equation}
+v \left[m/s\right] = \sqrt{\Delta x^2 + \Delta y^2}px \cdot \frac{1}{10\cdot10^{-6}s} \cdot \frac{0.082m}{1024px}
+\label{eq:conv}
+\end{equation}
+
+Il fattore di conversione di eq. \ref{eq:conv} è stato utilizzato per tutte le figure presentate.
+
+\paragraph{Dati spuri}: tutti i dati di velocità spuri possono teoricamente essere sostituiti utilizzando i valori degli 8 elementi vicini, se ritenuti corretti. Il procedimento richiederebbe di identificare vettori molto diversi dai confinanti in termini di modulo e direzione e sostituirli con opportune medie. Poiché la miglior correlazione ottenuta (\textbf{NCC}) non presenta un numero sufficiente di dati palesemente spuri, si è deciso di non implementare questa operazione.
+
+\section{Codice di calcolo}
+
+Il linguaggio utilizzato per effettuare l'analisi è \textit{Python} ed il codice implementato è visibile all'indirizzo \url{https://github.com/Ccaccia73/FS_report} nella cartella \textsc{code}.\\
+Un esempio della sequenza di oerazioni è visibile (non eseguibile) all'indirizzo \url{http://nbviewer.jupyter.org/github/ccaccia73/FS_report/blob/master/code/PIV.ipynb}
+
 
 \newpage
+
+\section{Confronto con OpenPIV}
+
+OpenPIV è un pacchetto software (\url{http://www.openpiv.net/}) open-source per l'analisi ed il post-processing di immagini PIV. \`{E} implementato in diversi linguaggi e fornisce diverse funzionalità per il filtraggio e l'analisi. Come ulteriore analisi e per valutare la qualità dei risultati ottenuti, sono state eseguite alcune analisi con la versione del programma in \textsc{C++}.  
+
+
+
+
+
+
+
+
+
+\newpage
+
 
 \section{Figure Aggiuntive}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1\textwidth]{images/raw_images.png}
-	\caption{\label{fig:img}Immagini originali}
+	\caption{Immagini originali}
+	\label{fig:img}
 \end{figure}
 
 
@@ -183,15 +232,39 @@ We hope you find write\LaTeX\ useful, and please let us know if you have any fee
  	%\hspace{0.3\textwidth}
  	\subfigure[PIV con DFT - finestra 32px]
  	{\includegraphics[width=0.48\textwidth]{images/scikit_32_filt.png}}
- 	\caption{\label{fig:filt_piv}PIV su immagini filtrate}
+ 	\caption{PIV su immagini filtrate}
+ 	\label{fig:filt_piv}
  \end{figure}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{images/All_norm_CM_32_orig.png}
+	\caption{Profilo alare}
+	\label{fig:airfoil}
+\end{figure}
 
-
+\newpage
 
 \begin{thebibliography}{9}
 \bibitem{mmaxf}
 Deen, Niels G., et al. "On image pre-processing for PIV of single-and two-phase flows over reflecting objects." Experiments in fluids 49.2 (2010): 525-530.
+
+\bibitem{corrCV}OpenCV object Detection, \url{http://docs.opencv.org/2.4/modules/imgproc/doc/object_detection.html?highlight=matchtemplate#matchtemplate}
+
+\bibitem{ncc}
+Zhao, Feng, Qingming Huang, and Wen Gao. "Image matching by normalized cross-correlation." Acoustics, Speech and Signal Processing, 2006. ICASSP 2006 Proceedings. 2006 IEEE International Conference on. Vol. 2. IEEE, 2006.
+
+\bibitem{spdft}
+Guizar-Sicairos, Manuel, Samuel T. Thurman, and James R. Fienup. "Efficient subpixel image registration algorithms." Optics letters 33.2 (2008): 156-158.
+
+\bibitem{spim}
+Westerweel, Jerry. "Digital particle image velocimetry." Delft University (1993): 75-78.
+
+\bibitem{scikit}Scikit-Image cross-correlation,
+\url{http://scikit-image.org/docs/dev/auto_examples/transform/plot_register_translation.html}
+
+\bibitem{openpiv}
+Liberzon, A., R. Gurka, and Z. Taylor. "Openpiv home page." (2009).
 
 \end{thebibliography}
 \end{document}

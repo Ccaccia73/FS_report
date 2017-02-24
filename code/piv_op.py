@@ -1,6 +1,8 @@
 import numpy as np
 from skimage.feature import register_translation
 
+#import warnings
+#warnings.filterwarnings("error")
 
 def min_max_filter():
 	pass
@@ -29,10 +31,20 @@ def normalized_corr_wind(im_a,im_b,window_size, max_ext,y0,x0):
             Amean = np.mean(imgA)
             Bmean = np.mean(imgB)
             
-            Astd = np.std(imgA)
-            Bstd = np.std(imgB)
+            if window_size > 8:
+                Astd = np.std(imgA)
+                Bstd = np.std(imgB)
+            else:
+                Astd = 1.0
+                Bstd = 1.0
             
-            corr_mat[j+max_ext,i+max_ext] = np.sum((imgA-Amean)*(imgB-Bmean)/((2*window_size+1)**2*Astd*Bstd))
+            #if Astd == 0.0:
+            #    print "A"
+            #if Astd == 0.0:
+            #    print "B"
+            
+            
+            corr_mat[j+max_ext,i+max_ext] = np.sum((imgA-Amean)*(imgB-Bmean))/((2*window_size+1)**2*Astd*Bstd)
             
     return corr_mat
 
@@ -54,7 +66,7 @@ def find_best_corr(corr_matrix, find_max=False):
     return i,j
 
 
-def subpixel(corr_matrix,dy,dx):
+def subpixel(corr_matrix,dy,dx, gaussian = False):
     #print corr_matrix.shape
     if (dy > 0 and dy < corr_matrix.shape[0]-1) and (dx > 0 and dx < corr_matrix.shape[1]-1):
         phi_0 = corr_matrix[dy,dx]
@@ -64,12 +76,15 @@ def subpixel(corr_matrix,dy,dx):
         
         phi_m1y = corr_matrix[dy-1,dx]
         phi_m1x = corr_matrix[dy,dx-1]
+
+        if gaussian:
+            eps_x = 0.5*(np.log(phi_m1x) - np.log(phi_1x))/ (np.log(phi_m1x) + np.log(phi_1x) - 2*np.log(phi_0))
+            eps_y = 0.5*(np.log(phi_m1y) - np.log(phi_1y))/ (np.log(phi_m1y) + np.log(phi_1y) - 2*np.log(phi_0))
+        else:
+            eps_x = 0.5*(phi_m1x - phi_1x)/ (phi_m1x + phi_1x - 2*phi_0)
+            eps_y = 0.5*(phi_m1y - phi_1y)/ (phi_m1y + phi_1y - 2*phi_0)
+             
         
-        eps_x = 0.5*(np.log(phi_m1x) - np.log(phi_1x))/ (np.log(phi_m1x) + np.log(phi_1x) - 2*np.log(phi_0))
-        
-        
-        eps_y = 0.5*(np.log(phi_m1y) - np.log(phi_1y))/ (np.log(phi_m1y) + np.log(phi_1y) - 2*np.log(phi_0))
-    
     else:
         eps_y = 0.0
         eps_x = 0.0
