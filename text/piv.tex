@@ -9,7 +9,7 @@
 \usepackage{url}
 \usepackage{xfrac}
 
-\title{PIV image analysis}
+\title{Analisi di immagini PIV}
 
 \author{Claudio Caccia - 820091}
 
@@ -29,23 +29,23 @@ La \textit{Particle Image Velocimetry} (PIV) è un metodo per la visualizzazione
 \begin{itemize}
 	\item profilo alare \textit{NACA 23012} di corda $30cm$,
 	\item velocità galleria: $30m/s$,
-	\item dimensione delle immagini: $1024 \times 1280$ pixel \textit{grayscale} (cfr. Figura \ref{fig:img}) 
+	\item dimensione delle immagini: $1024 \times 1280$ pixel \textit{grayscale} (cfr. figura \ref{fig:img}) 
 	\item dimensione della finestra di analisi: $103\times82mm$
 	\item intervallo tra i fotogrammi: $\Delta t = 10\mu s$
 \end{itemize}
 
-L'analisi si compone di tre fasi: \textit{preprocessing}, \textit{correlazione} ed \textit{analisi} dei risultati.
+La procedura si compone di tre fasi: \textit{preprocessing}, \textit{correlazione} ed \textit{analisi} dei risultati.
 
 \section{Preprocessing}
 
-Prima di procedere alla determinazione del campo di velocit\`{a} \`{e} opportuno analizzare le caratteristiche delle immagini ed eventualmente migliorarne la qualit\`{a}. Le tecniche di miglioramento possono riguardare:
+Prima di determinare del campo di velocità è opportuno analizzare le caratteristiche delle immagini ed eventualmente migliorarne la qualità. Le tecniche di miglioramento possono riguardare:
 
 \begin{itemize}
 	\item \textit{Background subtraction}: tecnica utile ad eliminare lo sfondo comune alle immagini ed evidenziare solo il moto delle particelle. In genere serve una serie di immagini (almeno una decina) per poter eliminare lo sfondo in modo affidabile, pertanto non è stata impiegata qui.
-	\item \textit{Filtraggio}:  varie tecniche utili a migliorare la distinzione tra particelle e sfondo e a ridurre il rumore di fondo.
+	\item \textit{Filtraggio}:  varie tecniche utili a migliorare la distinzione tra particelle e sfondo ed a ridurre il rumore di fondo.
 \end{itemize}
 
-Un utile passo preliminare consiste nell'analizzare la distribuzione dell'intensità di grigio dei pixel, come illustrato in Figura \ref{fig:hist}. Si evidenzia come sia presente una netta separazione, in entrambe le immagini, tra lo sfondo (maggioranza dei pixel scuri) e le particelle ad intensità massima.
+Un utile passo preliminare consiste nell'analizzare la distribuzione dell'intensità di grigio dei pixel, come illustrato in figura \ref{fig:hist}. Si evidenzia come sia presente una netta separazione, in entrambe le immagini, tra lo sfondo (maggioranza dei pixel scuri) e le particelle ad intensità massima.
 
 \begin{figure}[h]
 	\centering
@@ -53,8 +53,8 @@ Un utile passo preliminare consiste nell'analizzare la distribuzione dell'intens
 	\caption{\label{fig:hist}Istogrammi della distribuzione delle intensità di grigio}
 \end{figure}
 
-Per questo motivo si è deciso di utilizzare le immagini originali senza l'applicazione di filtri. Inoltre, alcune analisi preliminari hanno mostrato\footnote{Test effettuati utilizzando semplici filtri a soglia o di tipo \textit{min/max}\cite{mmaxf}} come l'utilizzo di immagini filtrate possa in questo caso produrre un maggior numero di correlazioni spurie rispetto alle immagini originali, a parità di condizioni di test (cfr. ad es. Figura \ref{fig:filt_piv} ).
-
+Alcuni tentativi preliminari di correlazione hanno mostrato\footnote{Test effettuati applicando alle immagini semplici filtri a soglia o di tipo \textit{min/max}\cite{mmaxf}} come l'utilizzo di immagini filtrate possa in questo caso produrre un maggior numero di correlazioni spurie rispetto alle immagini originali, a parità di condizioni di test (cfr. ad es. Figura \ref{fig:filt_piv} ).
+Per questo motivo si è deciso di procedere utilizzando le immagini originali senza l'applicazione di filtri. 
 
 \section{Algoritmo per PIV}
 \label{sec:corr}
@@ -65,7 +65,7 @@ Il campo di velocità è ottenuto tramite \textit{correlazione} delle due immagi
 \subsection{Definizione dell'algoritmo di correlazione}
 Esistono diversi algoritmi \cite{corrCV} per effettuare la correlazione di due immagini. Sono stati considerati i seguenti:
 
-\paragraph{Sum of Squared Differences [SSD]} Consiste in un algoritmo computazionalmente semplice, la miglior correlazione si trova nel punto di \textit{minimo} di:
+\paragraph{Sum of Squared Differences [SSD]} Algoritmo computazionalmente semplice, la miglior correlazione si trova nel punto di \textit{minimo} di:
 
 \begin{equation}
 R\left[x,y \right] = \sum_{i,j=-\sfrac{N}{2}}^{\sfrac{N}{2}} \left( A\left[i+x,j+y\right] - B\left[i,j \right] \right)^2
@@ -90,7 +90,7 @@ R = \mathscr{F}^{-1} \{ \mathscr{F}\{A\} \circ \mathscr{F}\{B\}^*    \}
 \subsection{Scelta delle finestre di interrogazione}
 
 Trascurando aspetti computazionali, la dimensione delle finestre di interrogazione comporta un \textit{trade-off} tra una definizione accurata del campo di velocità, che richiede finestre di interrogazione piccole, e la bontà della correlazione, più affidabile con finestre grandi. I risultati più significativi sono stati ottenuti con finestre da \textbf{16} e \textbf{32} pixel.\\
-Anche il massimo spostamento è un parametro da considerare: dai dati a disposizione, una velocità di $50 m/s$ corrisponde ad uno spostamento di circa $6.24px$ pertanto si considerano spostamenti massimi di \textbf{8} pixel. Le finestre di interrogazione sono pertanto:
+Anche la massima traslazione per la correlazione è un parametro da considerare: dai dati a disposizione, una velocità di $50 m/s$ corrisponde ad uno spostamento di circa $6.24px$ pertanto si considerano spostamenti massimi di \textbf{8} pixel. Le finestre di interrogazione sono pertanto:
 
 \begin{equation}
 I = \left[ 8+jN: 7+(j+1)N,8+kN: 7+(k+1)N\right] \quad N \in \{16,32 \} \quad j,k = 0 \ldots
@@ -123,7 +123,7 @@ Nel caso di \textbf{DFT}, l'algoritmo adottato \cite{spdft} consente automaticam
 
 \subsection{Fitting del profilo}
 
-I dati geometrici a disposizione hanno permesso di effettuare il \textit{fitting} (manuale) del profilo alare rispetto alle immagini a disposizione. Questo ha consentito di comprendere meglio il campo di moto (soprattutto rispetto alla scala dimensionale del profilo) e di escludere tutte le correlazioni di elementi interni all'ala. Il fitting migliore è stato trovato a $7.2°$ di inclinazione rispetto all'asse della fotocamera ed è illustrato in figura \ref{fig:airfoil} dove si può anche visualizzare l'andamento della velocità.  
+I dati geometrici a disposizione hanno permesso di effettuare il \textit{fitting} (manuale) del profilo alare rispetto alle immagini a disposizione. Questo ha consentito di comprendere meglio il campo di moto (soprattutto rispetto alla scala dimensionale del profilo) e di escludere tutte le correlazioni di elementi interni all'ala. Il fitting migliore è stato trovato a $7.2^{\circ}$ di inclinazione rispetto all'asse della fotocamera ed è illustrato in figura \ref{fig:airfoil} dove si può anche visualizzare l'andamento della velocità.  
 
 
 \section{Risultati}
@@ -132,7 +132,7 @@ Di seguito si riportano i principali risultati ottenuti dall'analisi PIV.
 
 \subsection{SSD senza interpolazione sub-pixel}
 
-Pur utilizzando una stima della correlazione semplice, si ottengono risultati interessanti, con pochi vettori di velocità palesemente spuri (cfr. figura \ref{fig:ssd}). L'unica zona difficile da correlare risulta essere la porzione visibile di intradosso, dove probabilmente vi è un afflusso non ottimale di particelle o il moto è particolarmente complesso. L'assenza di raffinamento \textit{sub-pixel} evidenzia un andamento della velocità costituito da regioni uniformi. Adottando una finestra a $16px$ comporta molti risultati spuri nello strato limite, come evidenziato in figura \ref{fig:ssd:a}.
+Pur utilizzando una stima della correlazione semplice, si ottengono risultati interessanti, con pochi vettori di velocità palesemente spuri (cfr. figura \ref{fig:ssd}). L'unica zona difficile da correlare risulta essere la porzione visibile di intradosso, dove probabilmente vi è un afflusso non ottimale di particelle o il moto è particolarmente complesso. L'assenza di raffinamento \textit{sub-pixel} evidenzia un andamento della velocità costituito da regioni uniformi. Adottando una finestra a $16px$ si ottengono molti risultati spuri nella regione di flusso separato, come evidenziato in figura \ref{fig:ssd:a}.
 
 \begin{figure}[h]
 	\centering
@@ -181,7 +181,7 @@ Seguendo l'esempio descritto in \cite{scikit}, è stata implementata la PIV util
 
 Una volta determinato il campo di spostamenti in pixel è necessario eseguire alcune operazioni di \textit{post-processing}.
 
-\paragraph{Conversione}: è necessario passare dagli spostamenti in pixel al valore di velocità, secondo la formula:
+\paragraph{Conversione} è necessario passare dagli spostamenti in pixel al valore di velocità, secondo la formula:
 
 \begin{equation}
 v \left[m/s\right] = \sqrt{\Delta x^2 + \Delta y^2}px \cdot \frac{1}{10\cdot10^{-6}s} \cdot \frac{0.082m}{1024px}
@@ -190,34 +190,82 @@ v \left[m/s\right] = \sqrt{\Delta x^2 + \Delta y^2}px \cdot \frac{1}{10\cdot10^{
 
 Il fattore di conversione di eq. \ref{eq:conv} è stato utilizzato per tutte le figure presentate.
 
-\paragraph{Dati spuri}: tutti i dati di velocità spuri possono teoricamente essere sostituiti utilizzando i valori degli 8 elementi vicini, se ritenuti corretti. Il procedimento richiederebbe di identificare vettori molto diversi dai confinanti in termini di modulo e direzione e sostituirli con opportune medie. Poiché la miglior correlazione ottenuta (\textbf{NCC}) non presenta un numero sufficiente di dati palesemente spuri, si è deciso di non implementare questa operazione.
+\paragraph{Dati spuri} tutti i dati di velocità spuri possono teoricamente essere sostituiti utilizzando i valori degli 8 elementi vicini, se ritenuti corretti. Il procedimento richiederebbe di identificare vettori molto diversi dai confinanti in termini di modulo e direzione e sostituirli con opportune medie. Poiché la miglior correlazione ottenuta (\textbf{NCC}) non presenta un numero sufficiente di dati palesemente spuri, si è deciso di non implementare questa operazione.
 
 \section{Codice di calcolo}
 
-Il linguaggio utilizzato per effettuare l'analisi è \textit{Python} ed il codice implementato è visibile all'indirizzo \url{https://github.com/Ccaccia73/FS_report} nella cartella \textsc{code}.\\
-Un esempio della sequenza di oerazioni è visibile (non eseguibile) all'indirizzo \url{http://nbviewer.jupyter.org/github/ccaccia73/FS_report/blob/master/code/PIV.ipynb}
+Il linguaggio utilizzato per effettuare l'analisi è \texttt{Python} ed il codice implementato è visibile all'indirizzo \url{https://github.com/Ccaccia73/FS_report} nella cartella \textsc{code}.\\
+Un esempio della sequenza di operazioni è visibile (non eseguibile) all'indirizzo \url{http://nbviewer.jupyter.org/github/ccaccia73/FS_report/blob/master/code/PIV.ipynb}
 
 
-\newpage
+\clearpage
 
 \section{Confronto con OpenPIV}
 
-OpenPIV è un pacchetto software (\url{http://www.openpiv.net/}) open-source per l'analisi ed il post-processing di immagini PIV. \`{E} implementato in diversi linguaggi e fornisce diverse funzionalità per il filtraggio e l'analisi. Come ulteriore analisi e per valutare la qualità dei risultati ottenuti, sono state eseguite alcune analisi con la versione del programma in \textsc{C++}.  
+OpenPIV è un pacchetto software (\url{http://www.openpiv.net/}) open-source per il pre-processing e l'analisi di immagini PIV. \`{E} implementato in diversi linguaggi e fornisce diverse funzionalità. Come verifica dei risultati ottenuti, sono state eseguite alcune prove con la versione del programma in \textsc{C++}.  
+
+\subsection{Pre Processing}
+
+In fase di \textit{pre-processing} è possibile:
+
+\begin{itemize}
+	\item applicare un filtro locale di tipo \textit{mean} o \textit{median},
+	\item effettuare un'operazione di interpolazione locale,
+	\item applicare uno \textit{smoothing} di tipo gaussiano,
+	\item scartare le finestre con un \textbf{SNR} inferiore ad una soglia configurabile.
+\end{itemize}
+
+Le prove effettuate confermano che l'applicazione di filtri non comporta significativi miglioramenti alla qualità della PIV ottenuta.
+
+\subsection{PIV}
+
+In fase di analisi è possibile:
+
+\begin{itemize}
+	\item Definire la finestra di interrogazione (da $16$ a $128px$),
+	\item Definire un livello di sovrapposizione tra le finestre, in modo da raffinare il campo di velocità,
+\end{itemize}
+
+La correlazione viene effettuata tramite \textbf{DFT} e l'interpolazione sub-pixel tramite \textit{three point Gaussian interpolation}.
+
+\subsection{Risultati}
+
+I risultati vengono forniti in un file di testo contenente le informazioni relative alla posizione della finestra, al vettore spostamento ed al rapporto \textbf{SNR}\footnote{calcolato come rapporto tra intensità di picco e media}.\\
+Sono state considerate finestre di interrogazione da $16$ e $32px$.
+
+I risultati di figura \ref{fig:openpiv} appaiono essere del tutto confrontabili con quelli ottenuti tramite DFT (figura \ref{eq:dft}), mostrando alcuni risultati spuri solo con finestre di interrogazione a $16px$ (figura \ref{fig:openpiv:a}). L'analisi della distribuzione del \textbf{SNR} (figura \ref{fig:snr}) evidenzia valori decisamente superiori nel caso di finestra a $32px$. 
+
+\begin{figure}[ht]
+	\centering
+	\subfigure[OpenPIV - finestra 16px\label{fig:openpiv:a}]
+	{\includegraphics[width=0.48\textwidth]{images/openpiv_16nofilt.png}}
+	%\hspace{0.3\textwidth}
+	\subfigure[OpenPIV - finestra 32px\label{fig:openpiv:b}]
+	{\includegraphics[width=0.48\textwidth]{images/openpiv_32nofilt.png}}
+	\caption{Risultati OpenPIV}
+	\label{fig:openpiv}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\subfigure[OpenPIV - SNR finestra 16px\label{fig:snr:a}]
+	{\includegraphics[width=0.48\textwidth]{images/SNR_16.png}}
+	%\hspace{0.3\textwidth}
+	\subfigure[OpenPIV - SNR finestra 32px\label{fig:snr:b}]
+	{\includegraphics[width=0.48\textwidth]{images/SNR_32.png}}
+	\caption{SNR OpenPIV}
+	\label{fig:snr}
+\end{figure}
 
 
-
-
-
-
-
-
-
-\newpage
+\clearpage
 
 
 \section{Figure Aggiuntive}
 
-\begin{figure}[h]
+Elenco di alcune figure citate nella relazione:
+
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=1\textwidth]{images/raw_images.png}
 	\caption{Immagini originali}
@@ -225,7 +273,7 @@ OpenPIV è un pacchetto software (\url{http://www.openpiv.net/}) open-source per
 \end{figure}
 
 
- \begin{figure}[h]
+ \begin{figure}[ht]
  	\centering
  	\subfigure[PIV con Correlazione - finestra 32px]
  	{\includegraphics[width=0.48\textwidth]{images/norm_32_filt.png}}
@@ -236,7 +284,7 @@ OpenPIV è un pacchetto software (\url{http://www.openpiv.net/}) open-source per
  	\label{fig:filt_piv}
  \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=1\textwidth]{images/All_norm_CM_32_orig.png}
 	\caption{Profilo alare e regione PIV}
