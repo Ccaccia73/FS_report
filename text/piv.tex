@@ -72,7 +72,7 @@ R\left[x,y \right] = \sum_{i,j=-\sfrac{N}{2}}^{\sfrac{N}{2}} \left( A\left[i+x,j
 \label{eq:ssd}
 \end{equation}
 
-\paragraph{Normalized Cross Correlation [NCC]}\cite{ncc} Richiede il calcolo di media e deviazione standard delle immagini, la miglior correlazione si trova nel punto di \textit{massimo} di:
+\paragraph{Normalized Cross Correlation [NCC]}\cite{imcorr},\cite{ncc}  Richiede il calcolo di media e deviazione standard delle immagini, la miglior correlazione si trova nel punto di \textit{massimo} di:
 
 \begin{equation}
 R\left[x,y \right] = \frac{ \sum_{i,j=-\sfrac{N}{2}}^{\sfrac{N}{2}} \left( A\left[i+x,j+y\right] - \mu_A \right) \cdot \left( B\left[i,j \right] - \mu_B \right) } { \sigma_A \cdot \sigma_B }
@@ -239,7 +239,7 @@ OpenPIV è un pacchetto software (\url{http://www.openpiv.net/}) open-source per
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1\textwidth]{images/All_norm_CM_32_orig.png}
-	\caption{Profilo alare}
+	\caption{Profilo alare e regione PIV}
 	\label{fig:airfoil}
 \end{figure}
 
@@ -251,14 +251,18 @@ Deen, Niels G., et al. "On image pre-processing for PIV of single-and two-phase 
 
 \bibitem{corrCV}OpenCV object Detection, \url{http://docs.opencv.org/2.4/modules/imgproc/doc/object_detection.html?highlight=matchtemplate#matchtemplate}
 
+\bibitem{imcorr}
+Pan, Bing, and Kai Li. "A fast digital image correlation method for deformation measurement." Optics and Lasers in Engineering 49.7 (2011): 841-847.
+
 \bibitem{ncc}
 Zhao, Feng, Qingming Huang, and Wen Gao. "Image matching by normalized cross-correlation." Acoustics, Speech and Signal Processing, 2006. ICASSP 2006 Proceedings. 2006 IEEE International Conference on. Vol. 2. IEEE, 2006.
+
+\bibitem{spim}
+Westerweel, Jerry. "Digital particle image velocimetry." Delft University (1993): 75-78.
 
 \bibitem{spdft}
 Guizar-Sicairos, Manuel, Samuel T. Thurman, and James R. Fienup. "Efficient subpixel image registration algorithms." Optics letters 33.2 (2008): 156-158.
 
-\bibitem{spim}
-Westerweel, Jerry. "Digital particle image velocimetry." Delft University (1993): 75-78.
 
 \bibitem{scikit}Scikit-Image cross-correlation,
 \url{http://scikit-image.org/docs/dev/auto_examples/transform/plot_register_translation.html}
